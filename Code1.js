@@ -14,6 +14,9 @@ let indexbg = 0;
 
 let songbuttons = []; //Botones de la derecha
 
+let amplitud;
+
+var controlVol = document.getElementById("controlvol");
 
 // Cargar archivos
 
@@ -40,6 +43,7 @@ function preload(){
   backgrounds[1] = loadImage("Elementos/BG3.png");
   backgrounds[2] = loadImage("Elementos/BG4.png");
   
+  
 }
 
 // Setup (Boton placeholder)
@@ -55,6 +59,7 @@ function setup() {
     applyButtonStyle(btn);
     btn.mousePressed(buttonSong(i));
     songbuttons.push(btn);
+    console.log("Ok for");
   }
 
   botonPlay=createButton("");
@@ -98,8 +103,36 @@ function setup() {
   botonStranger.position(36, 483);
   botonStranger.size(315, 78);
   applyButtonStyleIzquierda(botonStranger, "Elementos/Stranger.png");
+  amplitude = new p5.Amplitude();
+
+  slider = createSlider(0, 1, 1, 0.1);
+  slider.position(620, 570);
+  slider.addClass("slider1");
+  // slider.style("width", "80px");
+  // slider.style("height", "15px");
+  // slider.style("background-color", "#FFFFFF");
+  // slider.style("border-radius", "5px");
+  // slider.style("outline", "none");
+  // slider.style("opacity", "0.7");
+  // slider.style("transition", "opacity .2s");
+
+  
+  sliderReprod = createSlider(0, listaseleccionada[index].duration(), 0, 0.1);
+  sliderReprod.position(750, 490);
+  sliderReprod.style("width", "300px");
+  sliderReprod.input(jumpSong);
+  sliderReprod.addClass("slider2");
+  
+  
+
+  console.log("Ok setup"+listaseleccionada[index].duration());
+  
 }
 
+function jumpSong(){
+  // console.log("OK JUMP "+listaseleccionada[index].duration());
+  listaseleccionada[index].jump(sliderReprod.value(), listaseleccionada[index].duration()-sliderReprod.value())
+}
 
 // Draw
 
@@ -109,6 +142,16 @@ function draw() {
   image(backgrounds[indexbg],0,0)
 
   image(img,475,101);
+  let level = amplitude.getLevel();
+  let size = map(level, 0, 1, 0, 200);
+  ellipse(width/2, height/2, size, size);
+  // console.log("draw");
+  let val = slider.value();
+  // console.log("vol:"+val);
+  listaseleccionada[index].setVolume(val);
+  // console.log("currentTime"+listaseleccionada[index].currentTime());
+  sliderReprod.value(listaseleccionada[index].currentTime());
+
   
 }
 
@@ -191,3 +234,10 @@ function Last(){
   }
   Play();
 }
+
+function volumen(){
+  console.log("cambiando el volumne");
+  listaseleccionada[index].setVolume(0.1);
+}
+
+
