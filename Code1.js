@@ -1,8 +1,16 @@
 let img;
-let backgrounds = [];
-let canciones = [];
-let index = 0;
 
+let backgrounds = [];
+
+let canciones = [];
+let cancionesmorty = [];
+let cancionesstranger = []; //Cargar
+
+let listaseleccionada = canciones;
+let index = 0;
+let indexbg = 0;
+
+let songbuttons = [];
 
 
 //Cargar archivos
@@ -49,6 +57,24 @@ function setup() {
   botonLast.position(740, 538);
   botonLast.size(80, 80);
   applyButtonStyle(botonLast, "Elementos/Last.png");
+
+  botonPeaky=createButton("");
+  botonPeaky.mousePressed(changePlayList(0));
+  botonPeaky.position(36, 296);
+  botonPeaky.size(315, 78);
+  applyButtonStyleIzquierda(botonPeaky, "Elementos/Peaky.png");
+
+  botonMorty=createButton("");
+  botonMorty.mousePressed(changePlayList(1));
+  botonMorty.position(36, 388);
+  botonMorty.size(315, 78);
+  applyButtonStyleIzquierda(botonMorty, "Elementos/Morty.png");
+
+  botonStranger=createButton("");
+  botonStranger.mousePressed(changePlayList(2));
+  botonStranger.position(36, 483);
+  botonStranger.size(315, 78);
+  applyButtonStyleIzquierda(botonStranger, "Elementos/Stranger.png");
 }
 
 
@@ -57,15 +83,32 @@ function setup() {
 function draw() {
   background(0,0,0);
 
+  image(backgrounds[indexbg],0,0)
+
   image(img,475,101);
   
 }
 
 // Funciones
 
+function changePlayList(index) {
+  return function() {
+    indexbg = index;
+  }  
+}
+
 function applyButtonStyle(button, image) {
   button.style("background-color", "#FFFFFF");
   button.style("border-radius", "50%");
+  button.style("background-position", "center");
+  button.style("background-image", "url(" + image + ")");
+  button.style("background-repeat", "no-repeat");
+}
+
+function applyButtonStyleIzquierda(button, image) {
+  button.style("background-color", "transparent");
+  button.style("border","none");
+  button.style("border-radius", "15px");
   button.style("background-position", "center");
   button.style("background-image", "url(" + image + ")");
   button.style("background-repeat", "no-repeat");
