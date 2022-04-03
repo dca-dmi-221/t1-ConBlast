@@ -1,19 +1,21 @@
-let img;
+// Variables
 
-let backgrounds = [];
+let img; //Logo
 
-let canciones = [];
-let cancionesmorty = [];
-let cancionesstranger = []; //Cargar
+let backgrounds = []; //Fondos
+
+let canciones = []; //Canciones peaky blinders
+let cancionesmorty = []; //Canciones rick n morty
+let cancionesstranger = []; //Canciones stranger things
 
 let listaseleccionada = canciones;
 let index = 0;
 let indexbg = 0;
 
-let songbuttons = [];
+let songbuttons = []; //Botones de la derecha
 
 
-//Cargar archivos
+// Cargar archivos
 
 function preload(){
   canciones[0] = loadSound("PeakyBlinders/Electro1.mp3");
@@ -22,17 +24,38 @@ function preload(){
   canciones[3] = loadSound("PeakyBlinders/Electro4.mp3");
   canciones[4] = loadSound("PeakyBlinders/Electro5.mp3");
 
+  cancionesmorty [0] = loadSound("RickAndMorty/Trap1.mp3");
+  cancionesmorty [1] = loadSound("RickAndMorty/Trap2.mp3");
+  cancionesmorty [2] = loadSound("RickAndMorty/Trap3.mp3");
+  cancionesmorty [3] = loadSound("RickAndMorty/Trap4.mp3");
+  cancionesmorty [4] = loadSound("RickAndMorty/Trap5.mp3");
+
+  cancionesstranger [0] = loadSound("StrangerThings/Pop1.mp3");
+  cancionesstranger [1] = loadSound("StrangerThings/Pop2.mp3");
+  cancionesstranger [2] = loadSound("StrangerThings/Pop3.mp3");
+  cancionesstranger [3] = loadSound("StrangerThings/Pop4.mp3");
+  cancionesstranger [4] = loadSound("StrangerThings/Pop5.mp3");
+
   backgrounds[0] = loadImage("Elementos/BG2.png");
   backgrounds[1] = loadImage("Elementos/BG3.png");
   backgrounds[2] = loadImage("Elementos/BG4.png");
   
 }
 
-// Setup
+// Setup (Boton placeholder)
 
 function setup() {
   createCanvas(1800, 800);
   img = loadImage('Elementos/Logo.png')
+
+  for(let i = 0; i < 5; i++) {
+    const btn = createButton("Song "+ (i+1));
+    btn.size(248, 61);
+    btn.position(1512,246+(i*75));
+    applyButtonStyle(btn);
+    btn.mousePressed(buttonSong(i));
+    songbuttons.push(btn);
+  }
 
   botonPlay=createButton("");
   botonPlay.mousePressed(Play);
@@ -91,17 +114,41 @@ function draw() {
 
 // Funciones
 
-function changePlayList(index) {
+function buttonSong(newIndex) {
+  return function(){
+    listaseleccionada[index].stop();
+    index = newIndex;
+    listaseleccionada[index].play();
+  }
+}
+
+
+function changePlayList(newIndex) {
   return function() {
-    indexbg = index;
+    indexbg = newIndex;
+    listaseleccionada[index].stop();
+    switch (newIndex) {
+      case 0:
+        listaseleccionada = canciones;
+        break;
+      case 1:
+        listaseleccionada = cancionesmorty;
+        break;
+      case 2:
+        listaseleccionada = cancionesstranger;
+        break;
+    }
   }  
 }
 
 function applyButtonStyle(button, image) {
   button.style("background-color", "#FFFFFF");
-  button.style("border-radius", "50%");
+  button.style("border-radius", "50px");
   button.style("background-position", "center");
-  button.style("background-image", "url(" + image + ")");
+  if (image) {
+    button.style("background-image", "url(" + image + ")");
+  }
+  
   button.style("background-repeat", "no-repeat");
 }
 
@@ -115,17 +162,17 @@ function applyButtonStyleIzquierda(button, image) {
 }
 
 function Play(){
-  canciones[index].play();
+  listaseleccionada[index].play();
   
 }
 
 function Stop(){
-  canciones[index].stop();
+  listaseleccionada[index].stop();
 }
 
 function Next(){
   Stop();
-  if(index<canciones.length-1){
+  if(index<listaseleccionada.length-1){
   index+=1;
   }
   else {
@@ -136,7 +183,7 @@ function Next(){
 
 function Last(){
   Stop();
-  if(index<canciones.length-1){
+  if(index<listaseleccionada.length-1){
   index-=1;
   }
   else {
