@@ -46,7 +46,7 @@ function preload(){
   
 }
 
-// Setup (Boton placeholder)
+// Setup (Botones xd)
 
 function setup() {
   createCanvas(1800, 800);
